@@ -1,0 +1,30 @@
+name: Build Night Fox APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le projet
+        uses: actions/checkout@v4
+
+      - name: Installer Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Donner les permissions Gradle
+        run: chmod +x gradlew
+
+      - name: Compiler APK
+        run: ./gradlew assembleDebug
+
+      - name: Récupérer APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: NightFox-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
